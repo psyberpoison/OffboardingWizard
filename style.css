@@ -1,0 +1,374 @@
+:root {
+	--backdrop: #121212;
+	--dialog: #252525;
+	--row: #2F2F2F;
+	--row-hover: #3A3A3A;
+	--text: #F5F5F5;
+	--text-2: #CCCCCC;
+	--disabled: #A3A3A3;
+	--disabled-bg: #333333;
+	--accent: #8CC2FF;
+	--primary: #195CC4;
+	--primary-hover: #144A9E;
+	--primary-press: #0F3A7D;
+	--error: #FFB3AD;
+	--focus: #FFFFFF;
+	--danger: #C42B1C;
+}
+
+[hidden] { display: none !important; }
+/* generic stuff */
+body {
+	background: var(--backdrop);
+	color: var(--text);
+	font-family: "Segoe UI", system-ui, sans-serif;
+}
+dialog {
+	background: var(--dialog);
+	color: var(--text);
+	width: 760px;
+	/* 95% is the max width */
+	max-width: 95vw;
+	border: 1px solid #5C5C5C;
+	border-radius: 12px;
+	padding: 24px;
+}
+dialog::backdrop {
+	/* dims the page */
+	background: rgba(0, 0, 0, 0.6);
+}
+header {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+}
+header h2 { margin: 0; }
+header p  { margin: 4px 0 0; color: var(--text-2); }
+label {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	min-height: 48px;
+	padding: 12px 16px;
+	margin-bottom: 8px;
+	background: var(--row);
+	border-radius: 8px;
+	cursor: pointer;
+}
+fieldset {
+	border: none;
+	padding: 0;
+}
+legend {
+	font-size: 17px;
+	font-weight: 600;
+	margin-bottom: 12px;
+}
+footer {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 16px;
+}
+button {
+	min-height: 48px;
+	min-width: 48px;
+	padding: 0 20px;
+	border-radius: 8px;
+	border: none;
+	font-size: 15px;
+	font-family: inherit;
+	cursor: pointer;
+}
+/* end of generic stuff */
+
+/* my specific design stuff */
+#next-btn {
+	background: var(--primary);
+	color: #FFFFFF;
+	border: 1px solid var(--accent);
+	min-width: 120px;
+}
+[role="tablist"] {
+	display: flex;
+	gap: 8px;
+	/* the line under the tabs */
+	border-bottom: 1px solid #5C5C5C;
+	margin: 16px 0 24px;
+}
+[role="tab"] {
+	background: transparent;
+	color: var(--text-2);
+	border-radius: 0;
+	border-bottom: 3px solid transparent;
+	padding: 0 16px;
+}
+[role="tab"][aria-selected="true"] {
+	color: var(--text);
+	font-weight: 600;
+	border-bottom-color: var(--accent);
+}
+header button {
+	background: transparent;
+	color: var(--text);
+	font-size: 20px;
+}
+#back-btn {
+	background: var(--disabled-bg);
+	color: var(--text);
+}
+#launch-btn {
+	background: var(--danger);
+	color: #FFFFFF;
+	border: 1px solid #E35A4D;
+}
+input[type="checkbox"] {
+	width: 20px;
+	height: 20px;
+	accent-color: var(--accent);
+}
+/* end of my specific design stuff */
+
+/* adding this because box kept changing heights */
+[role="tabpanel"] {
+	min-height: 320px;
+	max-height: 60vh;
+	overflow-y: auto;
+}
+
+
+/* hover/active */
+	/* option rows */
+	label:hover  { background: var(--row-hover); }
+	label:active { background: #262626; }
+	/* next button */
+	#next-btn:hover  { background: var(--primary-hover); }
+	#next-btn:active { background: var(--primary-press); }
+	/* back button */
+	#back-btn:hover { background: #404040; }
+	/* tabs */
+	[role="tab"]:hover { border-bottom-color: rgba(140, 194, 255, 0.4); }
+	/* launch button */
+	#launch-btn:hover  { background: #B02718; }
+	#launch-btn:active { background: #9E2216; }
+	/* close button */
+	header button:hover { background: var(--row-hover); }
+/* end of hover/active */
+
+/* focus */
+:focus-visible {
+	outline: 2px solid var(--focus);
+	outline-offset: 2px;
+}
+/* end of focus */
+
+/* checkboxes */
+label:has(input:focus-visible) {
+	outline: 2px solid var(--focus);
+	outline-offset: 2px;
+}
+input[type="checkbox"]:focus-visible { outline: none; }
+/* end of checkboxes */
+
+/* disabled */
+[aria-disabled="true"] {
+	color: var(--disabled);
+	cursor: not-allowed;
+}
+#back-btn[aria-disabled="true"] {
+	background: var(--disabled-bg);
+}
+#back-btn[aria-disabled="true"]:hover {
+	background: var(--disabled-bg);
+}
+/* end of disabled */
+
+/* error stuff */
+.reason {
+	margin: -4px 0 8px 16px;
+	font-size: 13px;
+	color: var(--text-2);
+}
+label:has(input[aria-disabled="true"]) {
+	color: var(--disabled);
+	cursor: not-allowed;
+}
+label:has(input[aria-disabled="true"]):hover {
+	background: var(--row);
+}
+/* end of error stuff */
+
+/* picker stuff for assigning other users access */
+.picker {
+	margin: -4px 0 8px 50px;
+}
+input[type="text"] {
+	width: 100%;
+	height: 44px;
+	padding: 0 12px;
+	background: var(--dialog);
+	color: var(--text);
+	border: 1px solid #8A9BB3;
+	border-radius: 6px;
+	font: inherit;
+	box-sizing: border-box;
+}
+input[type="text"]::placeholder { color: var(--text-2); }
+.error {
+	color: var(--error);
+	font-size: 13px;
+	margin: 6px 0 0;
+}
+.error:empty { display: none; }
+.picker.has-error input[type="text"] {
+	border-color: var(--error);
+}
+.picker-row {
+	display: flex;
+	gap: 8px;
+}
+.picker-row input[type="text"] {
+	flex: 1;
+	min-width: 0;
+}
+.add-btn {
+	background: var(--disabled-bg);
+	color: var(--text);
+}
+.add-btn:hover { background: #404040; }
+.hint {
+	font-size: 13px;
+	color: var(--text-2);
+	margin: 6px 0 0;
+}
+.selected-list {
+	list-style: none;
+	padding: 0;
+	margin: 8px 0 0;
+}
+.selected-list label { margin-bottom: 4px; }
+.checking {
+	margin-left: auto;
+	font-size: 13px;
+	color: var(--text-2);
+}
+/* end of picker stuff */
+
+/* closing box when X is clicked */
+#discard-dialog {
+	width: 420px;
+}
+.dialog-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 8px;
+	margin-top: 24px;
+}
+#discard-no {
+	background: var(--disabled-bg);
+	color: var(--text);
+}
+#discard-no:hover { background: #404040; }
+#discard-yes {
+	background: var(--danger);
+	color: #FFFFFF;
+}
+#discard-yes:hover { background: #B02718; }
+/* end of closing box when X is clicked */
+
+/* animations */
+label, button, [role="tab"] {
+	transition: background-color 150ms ease-out, border-color 250ms ease-in-out;
+}
+/* end of animations */
+
+/* confirmation tab stuff */
+#summary-list li { margin-bottom: 6px; }
+.warning {
+	background: var(--row);
+	border-left: 3px solid var(--accent);
+	padding: 12px 16px;
+	border-radius: 4px;
+}
+#confirm-dialog { width: 460px; }
+#confirm-dialog .dialog-actions button {
+	min-width: 120px;
+	min-height: 56px;
+}
+#confirm-cancel { background: var(--disabled-bg); color: var(--text); }
+#confirm-cancel:hover { background: #404040; }
+#confirm-yes { background: var(--primary); color: #FFFFFF; border: 1px solid var(--accent); }
+#confirm-yes:hover { background: var(--primary-hover); }
+#confirm-yes:active { background: var(--primary-press); }
+/* end of confirmation tab stuff */
+
+/* progress tab stuff */
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	white-space: nowrap;
+}
+#task-list { list-style: none; padding: 0; margin: 0; }
+.task {
+	display: flex;
+	gap: 14px;
+	align-items: flex-start;
+	background: var(--row);
+	border: 1px solid transparent;
+	border-radius: 8px;
+	padding: 14px 16px;
+	margin-bottom: 8px;
+}
+.task-icon {
+	width: 20px;
+	height: 20px;
+	flex-shrink: 0;
+	display: grid;
+	place-items: center;
+	margin-top: 2px;
+	box-sizing: border-box;
+}
+.task-status { margin-left: 8px; font-size: 13px; color: var(--text-2); }
+.task-desc   { margin: 4px 0 0; font-size: 13px; color: var(--text-2); }
+.task[data-status="pending"] .task-icon::before {
+	content: "";
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background: var(--disabled);
+}
+.task[data-status="running"] .task-icon {
+	border: 3px solid var(--row-hover);
+	border-top-color: var(--accent);
+	border-radius: 50%;
+	animation: spin 800ms linear infinite;
+}
+.task[data-status="done"] .task-icon::before   { content: "✓"; color: var(--accent); font-weight: 700; }
+.task[data-status="failed"] .task-icon::before { content: "!"; color: var(--error);  font-weight: 700; }
+.task[data-status="failed"] { border-color: var(--error); }
+@keyframes spin { to { transform: rotate(360deg); } }
+.retry-btn { margin-top: 8px; background: var(--disabled-bg); color: var(--text); }
+.retry-btn:hover { background: #404040; }
+#progress-summary.has-error { border-left-color: var(--error); }
+/* end of progress tab stuff */
+
+/* after progress is done */
+#done-btn { background: var(--primary); color: #FFFFFF; border: 1px solid var(--accent); min-width: 120px; }
+#done-btn:hover { background: var(--primary-hover); }
+#launch-btn[aria-disabled="true"],
+#launch-btn[aria-disabled="true"]:hover {
+	background: var(--disabled-bg);
+	color: var(--disabled);
+	border-color: transparent;
+}
+#launch-reason { margin: 8px 0 0; }
+/* end of after progress stuff */
+
+label:active, button:active { transition-duration: 0ms; }
+
+@media (prefers-reduced-motion: reduce) {
+	* { transition: none !important; }
+	.task[data-status="running"] .task-icon { animation: none; }
+}

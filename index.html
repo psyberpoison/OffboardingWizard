@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<!-- This should make it scale on phone screens -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Offboarding Wizard</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<!-- main page that shows example user plus the launch button, not building out full office page, too much work -->
+	<main>
+	<h1>Example User</h1>
+	<button id="launch-btn" type="button" aria-describedby="launch-reason">Offboarding Wizard</button>
+	<p class="reason" id="launch-reason" hidden></p>
+	</main>
+	
+	
+	<!-- pulled aria stuff from: 
+	https://developer.mozilla.org/en-US/docs/Web/Accessibility/Guides/Understanding_WCAG/Text_labels_and_names
+	-->
+	
+	<!-- start of the wizard -->
+	<dialog id="wizard" aria-labelledby="wizard-title">
+	<header>
+	<div>
+		<h2 id="wizard-title">Offboarding Wizard</h2>
+		<p>Offboarding: Example User</p>
+	</div>
+	<button type="button" id="close-btn" aria-label="Close Wizard">X</button>
+	</header>
+	
+	<!-- building out the tabs -->
+	<div role="tablist" aria-label="Offboarding steps">
+		<button role="tab" id="email-tab" aria-selected="true" aria-controls="panel-email">Email</button>
+		<button role="tab" id="onedrive-tab" aria-selected="false" aria-controls="panel-onedrive">OneDrive</button>
+		<button role="tab" id="confirmation-tab" aria-selected="false" aria-controls="panel-confirmation">Confirmation</button>
+		<button role="tab" id="progress-tab" aria-selected="false" aria-controls="panel-progress" aria-disabled="true">Progress</button>
+	</div>
+	
+	<form id="offboard-form" aria-labelledby="wizard-title">
+	
+	<!-- email tab -->
+	<section role="tabpanel" id="panel-email" aria-labelledby="email-tab">
+		<fieldset>
+		<legend>What should happen to Example User's email?</legend>
+		<!-- option 1, records -->
+		<label>
+			<input type="checkbox" name="email-records" aria-describedby="email-keep-reason">
+			Email will be needed for records (downloads a .PST)
+		</label>
+
+		<!-- option 2, forward to user -->
+		<label>
+			<input type="checkbox" name="email-specific" aria-describedby="email-keep-reason">
+			Email will need to be forwarded to a specific user
+		</label>
+		<!-- picker for specific user -->
+		<div class="picker" id="email-specific-picker" hidden>
+			<div class="picker-row">
+				<input type="text" id="email-specific-input" list="user-list" placeholder="Type a name…" aria-label="Add a user to forward email to" aria-describedby="email-specific-hint email-specific-error">
+				<button type="button" class="add-btn" id="email-specific-add">Add</button>
+			</div>
+			<p class="hint" id="email-specific-hint">Press Enter or Add. Uncheck a name to remove it.</p>
+			<ul class="selected-list" id="email-specific-selected" aria-label="Users email will be forwarded to"></ul>
+			<p class="error" id="email-specific-error" role="alert"></p>
+		</div>
+
+		<!-- option 3, forward to group -->
+		<label>
+			<input type="checkbox" name="email-group" aria-describedby="email-keep-reason">
+			Email will need to be forwarded to a distribution list/group
+		</label>
+		<!-- picker for groups -->
+		<div class="picker" id="email-group-picker" hidden>
+			<div class="picker-row">
+				<input type="text" id="email-group-input" list="group-list" placeholder="Type a group name…" aria-label="Add a group to forward email to" aria-describedby="email-group-hint email-group-error">
+				<button type="button" class="add-btn" id="email-group-add">Add</button>
+			</div>
+			<p class="hint" id="email-group-hint">Press Enter or Add. Uncheck a name to remove it.</p>
+			<ul class="selected-list" id="email-group-selected" aria-label="Groups email will be forwarded to"></ul>
+			<p class="error" id="email-group-error" role="alert"></p>
+		</div>
+		<p class="reason" id="email-keep-reason" hidden>Unavailable while "not needed in any capacity" is selected.</p>
+		
+		<!-- option 4, not needed -->
+		<label>
+			<input type="checkbox" name="email-none" aria-describedby="email-none-reason">
+			Email will not be needed in any capacity
+		</label>
+		<p class="reason" id="email-none-reason" hidden>Unavailable while another email option is selected.</p>
+		</fieldset>
+	</section>
+	
+	<!-- onedrive tab -->
+	<section role="tabpanel" id="panel-onedrive" aria-labelledby="onedrive-tab" hidden>
+		<fieldset>
+		<legend>What should happen to Example User's OneDrive?</legend>
+		
+		<!-- option 1, records -->
+		<label>
+			<input type="checkbox" name="onedrive-records" aria-describedby="onedrive-keep-reason">
+			OneDrive contents will be needed for records (downloads as .ZIP)
+		</label>
+		
+		<!-- option 2, give to another user -->
+		<label>
+			<input type="checkbox" name="onedrive-access" aria-describedby="onedrive-keep-reason">
+			Give another user access to this user's OneDrive
+		</label>
+		
+		<!-- picker for onedrive -->
+		<div class="picker" id="onedrive-access-picker" hidden>
+			<div class="picker-row">
+				<input type="text" id="onedrive-access-input" list="user-list" placeholder="Type a name…" aria-label="Add a user to give OneDrive access to" aria-describedby="onedrive-access-hint onedrive-access-error">
+				<button type="button" class="add-btn" id="onedrive-access-add">Add</button>
+			</div>
+			<p class="hint" id="onedrive-access-hint">Press Enter or Add. Uncheck a name to remove it.</p>
+			<ul class="selected-list" id="onedrive-access-selected" aria-label="Users given OneDrive access"></ul>
+			<p class="error" id="onedrive-access-error" role="alert"></p>
+		</div>
+		<p class="reason" id="onedrive-keep-reason" hidden>Unavailable while "no longer needed" is selected.</p>
+		
+		<!-- option 3, not needed -->
+		<label>
+			<input type="checkbox" name="onedrive-none" aria-describedby="onedrive-none-reason">
+			This user's OneDrive will no longer be needed in any capacity
+		</label>
+		<p class="reason" id="onedrive-none-reason" hidden>Unavailable while another OneDrive option is selected.</p>
+		</fieldset>
+	</section>
+
+	<!-- confirmation tab -->
+	<section role="tabpanel" id="panel-confirmation" aria-labelledby="confirmation-tab" hidden>
+	<h3>Review changes</h3>
+	<p>These changes will happen when you confirm:</p>
+	<ul id="summary-list"></ul>
+
+	<h3>Licenses being removed</h3>
+	<ul>
+		<!-- fake license stuff for filler -->
+		<li><strong>Office 365 E3:</strong> email, OneDrive, Teams, and the desktop Office apps</li>
+	</ul>
+	<p class="warning">You have 30 days to reassign licenses before this user's email and OneDrive content is permanently deleted.</p>
+
+	<!-- confirmation checkbox -->
+	<label>
+		<input type="checkbox" id="verify-box" aria-describedby="verify-error">
+		I understand that these changes might not be reversable.
+	</label>
+	<p class="error" id="verify-error" role="alert"></p>
+	</section>
+
+	<!-- progress tab -->
+	<section role="tabpanel" id="panel-progress" aria-labelledby="progress-tab" hidden>
+		<h3>Progress</h3>
+		<p id="progress-eta"></p>
+		<p id="progress-summary" class="warning" hidden></p>
+		<ul id="task-list"></ul>
+		<button type="button" id="done-btn" hidden>Done</button>
+	</section>
+	
+	</form>
+	
+	<!-- screen reader -->
+	<div id="progress-live" role="log" aria-live="polite" class="sr-only"></div>
+	
+	<!-- user and group list for the pickers -->
+	<datalist id="user-list">
+		<option value="Joe Martinez"></option>
+		<option value="Stacy Kim"></option>
+		<option value="Priya Patel"></option>
+		<option value="Marcus Lee"></option>
+		<option value="Dana Brooks"></option>
+	</datalist>
+	<datalist id="group-list">
+		<option value="HR Team"></option>
+		<option value="Sales"></option>
+		<option value="IT Support"></option>
+		<option value="All Staff"></option>
+	</datalist>
+	
+	<!-- back and next buttons -->
+	<footer>
+		<button type="button" id="back-btn">Back</button>
+		<button type="button" id="next-btn">Next</button>
+	</footer>
+	</dialog>
+	
+	<!-- if the user closes wizard and still has changes -->
+	<dialog id="discard-dialog" aria-labelledby="discard-title" aria-describedby="discard-desc">
+		<h2 id="discard-title">Discard changes?</h2>
+		<p id="discard-desc">Your selections for Example User will be lost.</p>
+		<div class="dialog-actions">
+			<button type="button" id="discard-no">No, keep working</button>
+			<button type="button" id="discard-yes">Yes, discard</button>
+		</div>
+	</dialog>
+	
+	<!-- confirmation box -->
+	<dialog id="confirm-dialog" aria-labelledby="confirm-title" aria-describedby="confirm-desc">
+		<h2 id="confirm-title">Start offboarding?</h2>
+		<p id="confirm-desc">Licenses will be removed and Example User will lose access immediately. Some changes cannot be undone.</p>
+		<div class="dialog-actions">
+			<button type="button" id="confirm-cancel">Cancel</button>
+			<button type="button" id="confirm-yes">Confirm</button>
+		</div>
+	</dialog>
+	
+<script src="script.js"></script>	
+</body>
+</html>
